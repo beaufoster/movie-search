@@ -25,7 +25,7 @@ app.use(cors())
 
 // Methods
 app.get('/', (request, response) => {
-    response.send('<h1>Hello World!</h1>')
+    response.sendFile(__dirname + '/index.html')
 })
 
 app.get('/search', async(request, response) => {
