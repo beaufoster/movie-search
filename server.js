@@ -40,7 +40,7 @@ app.get("/search", async (request,response) => {
                 }
             }
         ]).toArray()
-        //console.log(result)
+        // console.log(result[0])
         response.send(result)
     } catch (error) {
         response.status(500).send({message: error.message})
@@ -51,8 +51,9 @@ app.get("/search", async (request,response) => {
 app.get("/get/:id", async (request, response) => {
     try {
         let result = await collection.findOne({
-            "_id" : ObjectId(request.params.id)
+            "id" : ObjectId(request.params.id)
         })
+        console.log(result)
         response.send(result)
     } catch (error) {
         response.status(500).send({message: error.message})
