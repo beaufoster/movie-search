@@ -1,9 +1,10 @@
 const express = require('express')
 const app = express()
-const PORT = 8000
 const cors = require('cors')
 const {MongoClient, ObjectId} = require('mongodb')
 require('dotenv').config()
+const PORT = 8000
+
 
 // Database Connection
 let db,
@@ -24,15 +25,15 @@ app.use(express.json())
 app.use(cors())
 
 // Methods
-app.get('/', (request, response) => {
-    response.sendFile(__dirname + '/index.html')
-})
+// app.get('/', (request, response) => {
+//     response.sendFile(__dirname + '/index.html')
+// })
 
 app.get('/search', async(request, response) => {
     try{
-        let results = await collection.aggregate(
+        let result = await collection.aggregate([
             {
-                "$Search" : {
+                "$search" : {
                     "autocomplete" : {
                         "query" : `${request.query.query}`,
                         "path": "title",
@@ -42,21 +43,24 @@ app.get('/search', async(request, response) => {
                         }
                     }
                 }
-            }).toArray()
+            }
+        ]).toArray()
+            // console.log(result)
             response.send(result)
     }   catch (error) {
+        // console.log(result)
             response.status(500).send({message: error.message})
     }
 })
 
-app.get('/get/:id',  async(request, response) => {
+app.get('/get/:id',  async (request, response) => {
     try {
         let result = await collection.findOne({
             "_id": ObjectId(request.params.id)
         })
         response.send(result)
     } catch (error){
-        response.status().send({message: error.message})
+        response.status(500).send({message: error.message})
     }
 })
 
